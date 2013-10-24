@@ -1,5 +1,6 @@
 /*
- * This file contains all instance-specific definitions for the extension-module-base.
+ * This file contains all instance-specific definitions for the
+ * extension-module-base.
  */
 #include "extension_module_base.h"
 

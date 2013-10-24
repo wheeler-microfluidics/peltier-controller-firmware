@@ -11,9 +11,13 @@ using namespace microdrop;
 
 
 ExtensionModuleBase::ExtensionModuleBase() {
-    this->wire_handler_ = new ExtensionModuleWireHandler(this);
+    ExtensionModuleBase(new ExtensionModuleWireHandler(this));
 }
 
+ExtensionModuleBase::ExtensionModuleBase(
+        ExtensionModuleWireHandler *wire_handler) {
+    this->wire_handler_ = wire_handler;
+}
 
 /* Initialize the communications for the extension module. */
 void ExtensionModuleBase::begin() {

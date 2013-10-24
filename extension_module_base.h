@@ -93,8 +93,12 @@ public:
   ExtensionModuleBase();
 
   virtual ~ExtensionModuleBase() {
-    delete this->wire_handler_;
+    if (this->wire_handler_ != NULL) {
+      delete this->wire_handler_;
+    }
   }
+protected:
+  ExtensionModuleBase(ExtensionModuleWireHandler *wire_handler);
 private:
   template<typename T> void Serialize(T data, uint16_t size) {
     Serialize((const uint8_t*)data, size); }

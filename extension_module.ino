@@ -1,7 +1,7 @@
-#include "extension_module_base.h"
 #include <SPI.h>
 #include <Wire.h>
 #include "Memory.h"
+#include "extension_module_base.h"
 
 using namespace microdrop;
 

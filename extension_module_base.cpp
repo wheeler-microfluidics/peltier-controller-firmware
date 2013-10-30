@@ -37,11 +37,27 @@ void ExtensionModuleBase::begin() {
     Serial.print(P("free memory=")); Serial.println(free_memory(), DEC);
 }
 
+bool ExtensionModuleBase::ReadSerialCommand() {
+    if(Serial.available()) {
+        byte len = Serial.readBytesUntil('\n', this->buffer_,
+                                         sizeof(this->buffer_));
+        this->buffer_[len]=0;
+        return true;
+    }
+    return false;
+}
 
 /* Process any available requests on the serial port, or through Wire/I2C. */
 void ExtensionModuleBase::Listen() {
-    ProcessSerialInput();
-    if(this->wire_command_received_) {
+    if (this->ReadSerialCommand()) {
+        // A new-line-terminated command was successfully read into the buffer.
+        // Call `ProcessSerialInput` to handle process command string.
+        if (!this->ProcessSerialInput()) {
+            // Command was not handled.
+            Error(1);
+        }
+    }
+    if (this->wire_command_received_) {
       ProcessWireCommand();
     }
 }
@@ -79,62 +95,57 @@ void ExtensionModuleBase::DumpConfig() {
 }
 
 /* If there is a request pending on the serial port, process it. */
-void ExtensionModuleBase::ProcessSerialInput() {
-    if(Serial.available()) {
-        byte len = Serial.readBytesUntil('\n', this->buffer_,
-                                         sizeof(this->buffer_));
-        this->buffer_[len]=0;
-        char* substr;
+bool ExtensionModuleBase::ProcessSerialInput() {
+    char* substr;
 
-        if(strcmp(this->buffer_, P("reset_config()"))==0) {
-            LoadConfig(true);
-            DumpConfig();
-            return;
-        }
-
-        if(strcmp(this->buffer_, P("config()"))==0) {
-            DumpConfig();
-            return;
-        }
-
-        if(strcmp(this->buffer_, P("i2c_address()"))==0) {
-            Serial.println(P("i2c_address=") +
-                           String(this->config_settings_.i2c_address, DEC));
-            return;
-        }
-
-        substr = strstr(this->buffer_, P("set_i2c_address("));
-        if (substr != NULL && substr == this->buffer_
-            && substr[strlen(substr) - 1] == ')') {
-          buffer_[strlen(substr) - 1] = 0;
-          set_i2c_address(atoi(substr + strlen(P("set_i2c_address("))));
-          return;
-        }
-
-        Error(1);
+    if(strcmp(this->buffer_, P("reset_config()"))==0) {
+        LoadConfig(true);
+        DumpConfig();
+        return true;
     }
+
+    if(strcmp(this->buffer_, P("config()"))==0) {
+        DumpConfig();
+        return true;
+    }
+
+    if(strcmp(this->buffer_, P("i2c_address()"))==0) {
+        Serial.println(P("i2c_address=") +
+                       String(this->config_settings_.i2c_address, DEC));
+        return true;
+    }
+
+    substr = strstr(this->buffer_, P("set_i2c_address("));
+    if (substr != NULL && substr == this->buffer_
+        && substr[strlen(substr) - 1] == ')') {
+      buffer_[strlen(substr) - 1] = 0;
+      set_i2c_address(atoi(substr + strlen(P("set_i2c_address("))));
+      return true;
+    }
+    /* Command was not processed */
+    return false;
 }
 
 /* If there is a request pending from the I2C bus, process it. */
 void ExtensionModuleBase::ProcessWireCommand() {
-  this->bytes_written_ = 0;
-  this->bytes_read_ = 0;
-  this->send_payload_length_ = true;
-  this->return_code_ = RETURN_GENERAL_ERROR;
-  switch(this->cmd_) {
-  case CMD_PING:
-    if(this->payload_length_==0) {
-      Serialize("pong", sizeof(5));
-      this->return_code_ = RETURN_OK;
-    } else {
-      this->return_code_ = RETURN_BAD_PACKET_SIZE;
+    this->bytes_written_ = 0;
+    this->bytes_read_ = 0;
+    this->send_payload_length_ = true;
+    this->return_code_ = RETURN_GENERAL_ERROR;
+    switch(this->cmd_) {
+        case CMD_PING:
+          if(this->payload_length_==0) {
+            Serialize("pong", sizeof(5));
+            this->return_code_ = RETURN_OK;
+          } else {
+            this->return_code_ = RETURN_BAD_PACKET_SIZE;
+          }
+          break;
+        default:
+          break;
     }
-    break;
-  default:
-    break;
-  }
-  Serialize(&this->return_code_, sizeof(this->return_code_));
-  this->wire_command_received_ = false;
+    Serialize(&this->return_code_, sizeof(this->return_code_));
+    this->wire_command_received_ = false;
 }
 
 void ExtensionModuleBase::Error(uint8_t code) {

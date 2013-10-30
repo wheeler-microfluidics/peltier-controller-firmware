@@ -112,7 +112,8 @@ private:
 
   String VersionString(version_t version);
   boolean NextInt(char* &str, int32_t &value);
-  void ProcessSerialInput();
+  bool ReadSerialCommand();
+  bool ProcessSerialInput();
   void Error(uint8_t code);
   void DumpConfig();
   void LoadConfig(bool use_defaults=false);

@@ -1,4 +1,5 @@
 #include "PeltierController.h"
+#include "Config.h"
 
 #define P(str) (strcpy_P(p_buffer_, PSTR(str)), p_buffer_)
 
@@ -8,8 +9,8 @@ prog_char BaseNode::PROTOCOL_NAME_[] PROGMEM = "DropBot protocol";
 prog_char BaseNode::PROTOCOL_VERSION_[] PROGMEM = "0.1";
 prog_char BaseNode::MANUFACTURER_[] PROGMEM = "Wheeler Microfluidics Lab";
 prog_char BaseNode::NAME_[] PROGMEM = "Peltier controller";
-prog_char BaseNode::HARDWARE_VERSION_[] PROGMEM = "1.0";
-prog_char BaseNode::SOFTWARE_VERSION_[] PROGMEM = "0.1";
+prog_char BaseNode::HARDWARE_VERSION_[] PROGMEM = ___HARDWARE_VERSION___;
+prog_char BaseNode::SOFTWARE_VERSION_[] PROGMEM = ___SOFTWARE_VERSION___;
 prog_char BaseNode::URL_[] PROGMEM = "http://microfluidics.utoronto.ca/dropbot";
 
 OneWire PeltierControllerClass::one_wire_ = OneWire(ONE_WIRE_BUS);

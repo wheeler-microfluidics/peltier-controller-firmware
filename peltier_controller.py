@@ -1,4 +1,4 @@
-from extension_module import *
+from base_node import *
 import sys
 sys.path.append('C:\\Users\\ryan\\Documents\\Microdrop\\plugins')
 
@@ -13,7 +13,7 @@ CMD_GET_RAMP_SPEED =  0xA3;
 CMD_GET_TEMP =        0xA4;
 CMD_GET_CURRENT =     0xA5;
 
-class PeltierController(ExtensionModule):
+class PeltierController(BaseNode):
     def __init__(self, control_board, address):
         ExtensionModule.__init__(self, control_board, address)
 

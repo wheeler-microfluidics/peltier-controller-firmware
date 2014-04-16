@@ -3,9 +3,9 @@
 
 #include <DallasTemperature.h>
 #include <OneWire.h>
-#include <ExtensionModuleBase.h>
+#include <BaseNode.h>
 
-class PeltierControllerClass : public ExtensionModuleBase {
+class PeltierControllerClass : public BaseNode {
 public:
   // digital pins
   static const uint8_t PIN_IN_A = 7;

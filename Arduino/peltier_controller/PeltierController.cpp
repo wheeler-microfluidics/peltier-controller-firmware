@@ -1,20 +1,16 @@
-/*
- * This file contains all instance-specific definitions for the
- * extension-module-base.
- */
 #include "PeltierController.h"
 
 #define P(str) (strcpy_P(p_buffer_, PSTR(str)), p_buffer_)
 
 PeltierControllerClass PeltierController;
 
-prog_char ExtensionModuleBase::PROTOCOL_NAME_[] PROGMEM = "Extension module protocol";
-prog_char ExtensionModuleBase::PROTOCOL_VERSION_[] PROGMEM = "0.1";
-prog_char ExtensionModuleBase::MANUFACTURER_[] PROGMEM = "Wheeler Microfluidics Lab";
-prog_char ExtensionModuleBase::NAME_[] PROGMEM = "Peltier controller";
-prog_char ExtensionModuleBase::HARDWARE_VERSION_[] PROGMEM = "1.0";
-prog_char ExtensionModuleBase::SOFTWARE_VERSION_[] PROGMEM = "0.1";
-prog_char ExtensionModuleBase::URL_[] PROGMEM = "http://microfluidics.utoronto.ca/dropbot";
+prog_char BaseNode::PROTOCOL_NAME_[] PROGMEM = "DropBot protocol";
+prog_char BaseNode::PROTOCOL_VERSION_[] PROGMEM = "0.1";
+prog_char BaseNode::MANUFACTURER_[] PROGMEM = "Wheeler Microfluidics Lab";
+prog_char BaseNode::NAME_[] PROGMEM = "Peltier controller";
+prog_char BaseNode::HARDWARE_VERSION_[] PROGMEM = "1.0";
+prog_char BaseNode::SOFTWARE_VERSION_[] PROGMEM = "0.1";
+prog_char BaseNode::URL_[] PROGMEM = "http://microfluidics.utoronto.ca/dropbot";
 
 OneWire PeltierControllerClass::one_wire_ = OneWire(ONE_WIRE_BUS);
 DallasTemperature PeltierControllerClass::sensors_ = DallasTemperature(&one_wire_);
@@ -70,7 +66,7 @@ void PeltierControllerClass::process_wire_command() {
     }
     break;
   default:
-    ExtensionModuleBase::process_wire_command();
+    BaseNode::process_wire_command();
     break;
   }
 }
@@ -90,7 +86,7 @@ void PeltierControllerClass::set_ramp_speed(uint8_t ramp_speed) {
 }
 
 void PeltierControllerClass::begin() {
-  ExtensionModuleBase::begin();
+  BaseNode::begin();
   pinMode(PIN_PWM, OUTPUT);
   pinMode(PIN_IN_A, OUTPUT);
   pinMode(PIN_IN_B, OUTPUT);
@@ -111,7 +107,7 @@ void PeltierControllerClass::listen() {
   long time;
   do {
     time = millis();
-    ExtensionModuleBase::listen();
+    BaseNode::listen();
   } while(time-last_update_ < delay_);
   last_update_ = time;
   update_temperatures();

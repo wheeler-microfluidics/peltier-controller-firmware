@@ -3,7 +3,7 @@
 
 #include <DallasTemperature.h>
 #include <OneWire.h>
-#include <ExtensionModuleBase.h>
+#include <BaseNode.h>
 
 #include "PeltierController.h"
 

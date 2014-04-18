@@ -1,10 +1,4 @@
-from base_node import *
-import sys
-sys.path.append('C:\\Users\\ryan\\Documents\\Microdrop\\plugins')
-
-from dmf_control_board.dmf_control_board import *
-control_board = DMFControlBoard()
-control_board.connect()
+from base_node.base_node import BaseNode 
 
 CMD_SET_TARGET_TEMP = 0xA0;
 CMD_GET_TARGET_TEMP = 0xA1;
@@ -14,8 +8,8 @@ CMD_GET_TEMP =        0xA4;
 CMD_GET_CURRENT =     0xA5;
 
 class PeltierController(BaseNode):
-    def __init__(self, control_board, address):
-        ExtensionModule.__init__(self, control_board, address)
+    def __init__(self, proxy, address):
+        BaseNode.__init__(self, proxy, address)
 
     def target_temp(self):
         self.send_command(CMD_GET_TARGET_TEMP)

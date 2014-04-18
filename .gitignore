@@ -1,4 +1,6 @@
-build
+RELEASE-VERSION
+*.egg-info
 *.hex
 *.pyc
-Arduino/*/Config.h
+.ropeproject
+*/Arduino/*/Config.h

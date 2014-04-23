@@ -1,0 +1,17 @@
+#!/usr/bin/python
+# scons script for the Arduino sketch
+import re
+
+from arduino_build import ArduinoBuildContext
+import peltier_controller
+
+
+Import('sketch_build_root')
+
+context = ArduinoBuildContext(ARGUMENTS, build_root=sketch_build_root)
+arduino_hex = context.build(extra_sources=peltier_controller.get_sources(),
+                            register_upload=True,
+                            env_dict={'CPPPATH':
+                                      peltier_controller.get_includes()})
+
+Export('arduino_hex')

@@ -5,13 +5,13 @@
 
 PeltierControllerClass PeltierController;
 
-prog_char BaseNode::PROTOCOL_NAME_[] PROGMEM = "DropBot protocol";
-prog_char BaseNode::PROTOCOL_VERSION_[] PROGMEM = "0.1";
-prog_char BaseNode::MANUFACTURER_[] PROGMEM = "Wheeler Microfluidics Lab";
-prog_char BaseNode::NAME_[] PROGMEM = "Peltier controller";
-prog_char BaseNode::HARDWARE_VERSION_[] PROGMEM = ___HARDWARE_VERSION___;
-prog_char BaseNode::SOFTWARE_VERSION_[] PROGMEM = ___SOFTWARE_VERSION___;
-prog_char BaseNode::URL_[] PROGMEM = "http://microfluidics.utoronto.ca/dropbot";
+const char BaseNode::PROTOCOL_NAME_[] PROGMEM = "DropBot protocol";
+const char BaseNode::PROTOCOL_VERSION_[] PROGMEM = "0.1";
+const char BaseNode::MANUFACTURER_[] PROGMEM = "Wheeler Microfluidics Lab";
+const char BaseNode::NAME_[] PROGMEM = "Peltier controller";
+const char BaseNode::HARDWARE_VERSION_[] PROGMEM = ___HARDWARE_VERSION___;
+const char BaseNode::SOFTWARE_VERSION_[] PROGMEM = ___SOFTWARE_VERSION___;
+const char BaseNode::URL_[] PROGMEM = "http://microfluidics.utoronto.ca/dropbot";
 
 OneWire PeltierControllerClass::one_wire_ = OneWire(ONE_WIRE_BUS);
 DallasTemperature PeltierControllerClass::sensors_ = DallasTemperature(&one_wire_);
@@ -23,6 +23,7 @@ PeltierControllerClass::PeltierControllerClass() {
   heating_ = false;
   set_ramp_speed(255);
 }
+
 
 void PeltierControllerClass::process_wire_command() {
   switch (cmd_) {
@@ -122,8 +123,19 @@ void PeltierControllerClass::update_temperatures() {
 
 void PeltierControllerClass::control() {
   if(debug_) {
-    Serial.print(String(millis()) + ", " + String(temp_) + ", " + 
-                 String(target_temp_) + ", " + String(ramp_speed_) + ", ");
+    Serial.print(String(millis()) + ", ");
+    /* __NB__ `temp_` is a `float`, but [`String`][1] does not provide a
+     * constructor from a `float`.  However, `Serial.print` will print a
+     * `float` correctly.  The other option would be to cast the temperature to
+     * an integer type, though that would truncate any fractional component.
+     *
+     * [1]: http://arduino.cc/en/Reference/string */
+    Serial.print(temp_);
+    Serial.print(", ");
+    /* Using `Serial.print` instead of `String` conversion for `float` _(see
+     * `temp_` above)_. */
+    Serial.print(target_temp_);
+    Serial.print(", " + String(ramp_speed_) + ", ");
   }
   if(heating_ && temp_ < target_temp_ || !heating_ && temp_ < target_temp_ - hysteresis_) {
     if(debug_) {
@@ -145,6 +157,5 @@ void PeltierControllerClass::control() {
     }
     digitalWrite(PIN_IN_A, LOW);
     digitalWrite(PIN_IN_B, LOW);
-  }  
+  }
 }
-

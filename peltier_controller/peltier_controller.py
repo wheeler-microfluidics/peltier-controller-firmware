@@ -1,11 +1,12 @@
-from base_node.base_node import BaseNode 
+from base_node.base_node import BaseNode
 
-CMD_SET_TARGET_TEMP = 0xA0;
-CMD_GET_TARGET_TEMP = 0xA1;
-CMD_SET_RAMP_SPEED =  0xA2;
-CMD_GET_RAMP_SPEED =  0xA3;
-CMD_GET_TEMP =        0xA4;
-CMD_GET_CURRENT =     0xA5;
+CMD_SET_TARGET_TEMP = 0xA0
+CMD_GET_TARGET_TEMP = 0xA1
+CMD_SET_RAMP_SPEED  = 0xA2
+CMD_GET_RAMP_SPEED  = 0xA3
+CMD_GET_TEMP        = 0xA4
+CMD_GET_CURRENT     = 0xA5
+
 
 class PeltierController(BaseNode):
     def __init__(self, proxy, address):

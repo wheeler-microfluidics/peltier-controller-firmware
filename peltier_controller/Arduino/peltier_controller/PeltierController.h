@@ -11,11 +11,11 @@ public:
   static const uint8_t PIN_IN_A = 7;
   static const uint8_t PIN_IN_B = 8;
   static const uint8_t PIN_PWM = 9;
-  static const uint8_t ONE_WIRE_BUS = 2;  
+  static const uint8_t ONE_WIRE_BUS = 2;
 
   // analog pins
   static const uint8_t PIN_CS = 0; // A0
-  
+
   // command codes
   static const uint8_t CMD_SET_TARGET_TEMP = 0xA0;
   static const uint8_t CMD_GET_TARGET_TEMP = 0xA1;

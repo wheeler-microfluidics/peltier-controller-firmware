@@ -11,16 +11,16 @@ peltier_controller_files = find_package_data(package='peltier_controller',
                                              only_in_packages=False)
 pprint(peltier_controller_files)
 
-setup(name='wheeler.peltier_controller',
+setup(name='wheeler.peltier-controller-firmware',
       version=version.getVersion(),
       description='Arduino-based peltier controller firmware and Python API.',
       author='Ryan Fobel',
       author_email='ryan@fobel.net',
-      url='http://microfluidics.utoronto.ca/git/firmware___peltier_controller.git',
+      url='https://github.com/wheeler-microfluidics/peltier-controller-firmware',
       license='GPLv2',
       packages=['peltier_controller'],
       package_data=peltier_controller_files,
-      install_requires=['wheeler.base_node'])
+      install_requires=['wheeler.base-node'])
 
 
 @task
